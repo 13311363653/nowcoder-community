@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nowcoder.community.dao.UserMapper">
+    <!--  mybatis.type-aliases-package=com.nowcoder.community.entity在配置文件中指定了dao的位置，所以user类不需要写全路径-->
+
+<!--    <sql id="selectFields">-->
+<!--        id,username,password,salt,email,type,status,activation_code,header_url,create_time-->
+<!--    </sql>-->
+
+<!--    <sql id="insertFields">-->
+<!--        username,password,salt,email,type,status,activation_code,header_url,create_time-->
+<!--    </sql>-->
+    <!--id为方法名，resultType是返回值数据类型，parameterType，是方法形参的数据类型，返回值和参数的类型简单时不需要声明-->
+    <!--    赋值时，注意前面是数据库中名称（通常下划线命名），后面是java属性名（驼峰）-->
+    <!--    形参是int，可不声明,但返回值是自定义的User需要声明-->
+    <select id="selectById" resultType="User">
+        select id,
+               username,
+               password,
+               salt,
+               email,
+               type,
+               status,
+               activation_code,
+               header_url,
+               create_time
+        from user
+        where id = #{id}
+    </select>
+    <!--    形参是String，可不声明-->
+    <select id="selectByName" resultType="User">
+        select id,
+               username,
+               password,
+               salt,
+               email,
+               type,
+               status,
+               activation_code,
+               header_url,
+               create_time
+        from user
+        where username = #{username}
+
+    </select>
+    <!--    形参是String，可不声明-->
+    <select id="selectByEmail" resultType="User">
+        select id,
+               username,
+               password,
+               salt,
+               email,
+               type,
+               status,
+               activation_code,
+               header_url,
+               create_time
+        from user
+        where email = #{email}
+
+    </select>
+
+    <!--    返回值为int可以不声明-->
+    <insert id="insertUser" parameterType="User" keyProperty="id">
+        insert into user (username, password, salt, email, type, status, activation_code, header_url, create_time)
+            value (#{username}, #{password}, #{salt}, #{email}, #{type}, #{status}, #{activationCode}, #{headerUrl},
+                   #{createTime})
+    </insert>
+
+    <!--    形参是int，返回值是int,可不声明-->
+    <update id="updateStatus">
+        update user
+        set status=#{status}
+        where id = #{id}
+    </update>
+
+    <update id="updateHeader">
+        update user
+        set header_url=#{headerUrl}
+        where id = #{id}
+    </update>
+
+    <update id="updatePassword">
+        update user
+        set password = #{password}
+        where id = #{id}
+    </update>
+</mapper>

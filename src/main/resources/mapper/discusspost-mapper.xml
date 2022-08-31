@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nowcoder.community.dao.DiscussPostMapper">  <!--    指定Mapper文件名-->
+
+    <sql id="selectFields">
+        id,user_id,title,content,type,status,create_time,comment_count,score
+    </sql>
+
+
+    <!--    List<DiscussPost> selectDiscussPosts(int userId,int offset,int limit);-->
+    <!--    返回值类型 List<DiscussPost>，其中List是java自带的不用声明-->
+    <select id="selectDiscussPosts" resultType="DiscussPost">
+        <!--        select id,user_id,title,content,type,status,create_time,comment_count,score-->
+        <!--        from discuss_post-->
+        <!--        where status !=2-->
+        <!--        <if test="userId !=0">and user_id = #{userId}  &lt;!&ndash;    注意方法参数和数据库字段的写法区别&ndash;&gt;-->
+        <!--        </if>-->
+        <!--        order by type desc,create_time desc-->
+        <!--        limit #{offset},#{limit}-->
+        select
+        <include refid="selectFields"></include>
+        from discuss_post
+        where status!=2
+        <if test="userId != 0">  <!--userId为0的情况对应查询所有人的信息，不指定某个用户-->
+            and user_id = #{userId}
+        </if>
+        order by type desc ,create_time desc
+        limit #{offset} ,#{limit}
+    </select>
+
+
+    <!--    int selectDiscussRows(@Param("userId") int userId);-->
+    <select id="selectDiscussRows" resultType="int"> <!--此处不声明resultType="int"会报错-->
+        select count(*)
+        from discuss_post
+        where status!=2
+        <if test="userId!=0">
+          and user_id=#{userId}
+        </if>
+    </select>
+
+</mapper>
